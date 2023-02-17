@@ -3,7 +3,7 @@
 
 cd src
     for F in *.c; do
-        gcc -c $F -o ../obj/${F%.c}.o
+        gcc -Werror -Wall -Wextra -c $F -o ../obj/${F%.c}.o
     done
 cd ..
 

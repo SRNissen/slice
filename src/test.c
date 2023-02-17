@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-void snns_Slice_isInit_discriminates_between_Init_and_NotInit()
+void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
 {
     snns_Slice this;
 
@@ -40,7 +40,7 @@ void snns_Slice_isInit_discriminates_between_Init_and_NotInit()
     return;
 }
 
-void snns_Slice_doInit_initializes_slices()
+void snns_Slice_doInit_initializes_slices(void)
 {
     snns_Slice this;
 
@@ -77,24 +77,22 @@ void snns_Slice_doInit_initializes_slices()
     }
 }
 
-void snns_Slice_makeNew_create_a_slice_in_Init_state()
+void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
 {
     snns_Slice this = snns_Slice_makeNew();
-        
+
     assert(snns_Slice_isInit(&this));
 }
 
-void snns_Slice_isClear_will_report_true_on_an_init_slice()
-    {
-        
-    }
-    
-    snns_Slice_isClear_will_report_false_on_nonInit_slices()
-    {
-        
-    }
+void snns_Slice_isClear_will_report_true_on_an_init_slice(void)
+{
+}
 
-void snns_Slice_isClear_testGroup()
+void snns_Slice_isClear_will_report_false_on_nonInit_slices(void)
+{
+}
+
+void snns_Slice_isClear_testGroup(void)
 {
     snns_Slice_isClear_will_report_true_on_an_init_slice();
     snns_Slice_isClear_will_report_false_on_nonInit_slices();
