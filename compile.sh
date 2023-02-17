@@ -1,6 +1,9 @@
 #!/bin/sh
 # This is a comment!
 
+echo
+echo "script: compile.sh"
+
 cd src
     for F in *.c; do
         gcc -Werror -Wall -Wextra -c $F -o ../obj/${F%.c}.o
@@ -8,5 +11,5 @@ cd src
 cd ..
 
 cd obj
-    gcc * -o ../bin/test
+    gcc -Werror -Wall -Wextra  * -o ../bin/test
 cd ..

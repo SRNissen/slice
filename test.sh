@@ -1,6 +1,7 @@
 #!/bin/sh
 # This is a comment!
 
-cd bin
-    ./test
-cd ..
+echo
+echo "script: test.sh"
+
+./bin/test

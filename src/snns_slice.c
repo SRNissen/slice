@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-bool snns_ok(int result)
+static bool snns_ok(int result)
 {
     return result == 0;
 }

@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
+static void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
 {
     snns_Slice this;
 
@@ -40,7 +40,7 @@ void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
     return;
 }
 
-void snns_Slice_doInit_initializes_slices(void)
+static void snns_Slice_doInit_initializes_slices(void)
 {
     snns_Slice this;
 
@@ -77,20 +77,20 @@ void snns_Slice_doInit_initializes_slices(void)
     }
 }
 
-void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
+static void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
 {
     snns_Slice this = snns_Slice_makeNew();
 
     assert(snns_Slice_isInit(&this));
 }
 
-void snns_Slice_isClear_will_report_true_on_an_Init_slice(void)
+static void snns_Slice_isClear_will_report_true_on_an_Init_slice(void)
 {
     snns_Slice this = snns_Slice_makeNew();
     assert(snns_Slice_isClear_linearN(&this));
 }
 
-void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null(void)
+static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null(void)
 {
 
     // Alloc a slice
@@ -111,7 +111,7 @@ void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_nul
     snns_Slice_dealloc(&this);
 }
 
-void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null(void)
+static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null(void)
 {
     // Alloc a slice
     snns_Slice this = snns_Slice_makeNew();
@@ -130,7 +130,7 @@ void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_
     ((char *)(this.arr))[0] = 0;
 
     // Alerts on last byte
-    ((char *)(this.arr))[this.cap - 1] = 255;
+    ((char *)(this.arr))[this.cap - 1] = 127;
     assert(!snns_Slice_isClear_linearN(&this));
     ((char *)(this.arr))[this.cap - 1] = 0;
 
@@ -151,19 +151,19 @@ void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_
     snns_Slice_dealloc(&this);
 }
 
-void snns_Slice_isClear_Alloc_group(void)
+static void snns_Slice_isClear_Alloc_group(void)
 {
     snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null();
     snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null();
 }
 
-void snns_Slice_isClear_testGroup(void)
+static void snns_Slice_isClear_testGroup(void)
 {
     snns_Slice_isClear_will_report_true_on_an_Init_slice();
     snns_Slice_isClear_Alloc_group();
 }
 
-void snns_Slice_doClear_leaves_Init_slices_unchanged(void)
+static void snns_Slice_doClear_leaves_Init_slices_unchanged(void)
 {
     snns_Slice this = snns_Slice_makeNew();
 
@@ -174,7 +174,7 @@ void snns_Slice_doClear_leaves_Init_slices_unchanged(void)
     assert(snns_Slice_isInit(&this));
 }
 
-void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
+static void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
 {
     // Arrange
     snns_Slice this = snns_Slice_makeNew();
@@ -191,7 +191,7 @@ void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
     snns_Slice_dealloc(&this);
 }
 
-void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
+static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
 {
     // ARRANGE
     // - Alloc a slice
@@ -216,7 +216,7 @@ void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     snns_Slice_dealloc(&this);
 }
 
-void snns_Slice_doClear_testGroup()
+static void snns_Slice_doClear_testGroup()
 {
     snns_Slice_doClear_leaves_Init_slices_unchanged();
     snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged();
@@ -225,7 +225,7 @@ void snns_Slice_doClear_testGroup()
 
 int main()
 {
-    puts("Testing snns_Slice functions");
+    puts("\nTesting snns_Slice functions");
 
     snns_Slice_isInit_discriminates_between_Init_and_NotInit();
     snns_Slice_doInit_initializes_slices();
