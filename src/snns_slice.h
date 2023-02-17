@@ -34,7 +34,7 @@ Slices are always in one of four states:
 **********************************************************/
 typedef struct snns_Slice
 {
-    void *arr;
+    char *arr;
     size_t cap;
 } snns_Slice;
 

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-static bool snns_ok(int result)
+static bool snns_ok(snns_Slice_Result result)
 {
     return result == 0;
 }

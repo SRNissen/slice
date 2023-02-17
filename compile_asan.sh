@@ -13,7 +13,7 @@ cd ..
 cd san
     cd asan
         cd obj
-            clang -g -fsanitize=address -fsanitize=memory -Werror -Wall -Wextra -Weverything * -o ../bin/test
+            clang -g -fsanitize=address -Werror -Wall -Wextra -Weverything * -o ../bin/test
         cd ..
     cd ..
 cd ..

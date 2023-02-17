@@ -101,7 +101,7 @@ static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_
     assert(alloc_result == snns_Slice_Result_ok);
     for (size_t i = 0; i < this.cap; ++i)
     {
-        ((char *)(this.arr))[i] = 0;
+        ((this.arr))[i] = 0;
     }
 
     // Assert a zeroed slice isClear
@@ -121,30 +121,30 @@ static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_
     assert(alloc_result == snns_Slice_Result_ok);
     for (size_t i = 0; i < this.cap; ++i)
     {
-        ((char *)(this.arr))[i] = 0;
+        ((this.arr))[i] = 0;
     }
 
     // Alerts on first byte
-    ((char *)(this.arr))[0] = 1;
+    ((this.arr))[0] = 1;
     assert(!snns_Slice_isClear_linearN(&this));
-    ((char *)(this.arr))[0] = 0;
+    ((this.arr))[0] = 0;
 
     // Alerts on last byte
-    ((char *)(this.arr))[this.cap - 1] = 127;
+    ((this.arr))[this.cap - 1] = 127;
     assert(!snns_Slice_isClear_linearN(&this));
-    ((char *)(this.arr))[this.cap - 1] = 0;
+    ((this.arr))[this.cap - 1] = 0;
 
     // Alerts on multiple set bytes
-    ((char *)(this.arr))[2] = 60;
-    ((char *)(this.arr))[3] = 120;
+    ((this.arr))[2] = 60;
+    ((this.arr))[3] = 120;
     assert(!snns_Slice_isClear_linearN(&this));
-    ((char *)(this.arr))[2] = 0;
-    ((char *)(this.arr))[3] = 0;
+    ((this.arr))[2] = 0;
+    ((this.arr))[3] = 0;
 
     // Alerts on all set bytes
     for (size_t i = 0; i < this.cap; ++i)
     {
-        ((char *)(this.arr))[i] = i + 1;
+        (this.arr)[i] = (char)(i + 1);
     }
     assert(!snns_Slice_isClear_linearN(&this));
 
@@ -203,15 +203,15 @@ static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     // - Fill it with something
     for (size_t i = 0; i < this.cap; ++i)
     {
-        ((char *)(this.arr))[i] = 28;
+        this.arr[i] = 28;
     }
-    
+
     // ACT
     snns_Slice_doClear(&this);
-    
+
     // ASSERT
     assert(snns_Slice_isClear_linearN(&this));
-    
+
     // Clean
     snns_Slice_dealloc(&this);
 }
