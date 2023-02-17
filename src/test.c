@@ -151,16 +151,11 @@ static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_
     snns_Slice_dealloc(&this);
 }
 
-static void snns_Slice_isClear_Alloc_group(void)
-{
-    snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null();
-    snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null();
-}
-
 static void snns_Slice_isClear_testGroup(void)
 {
     snns_Slice_isClear_will_report_true_on_an_Init_slice();
-    snns_Slice_isClear_Alloc_group();
+    snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null();
+    snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null();
 }
 
 static void snns_Slice_doClear_leaves_Init_slices_unchanged(void)
@@ -225,13 +220,9 @@ static void snns_Slice_doClear_testGroup()
 
 int main()
 {
-    puts("\nTesting snns_Slice functions");
-
     snns_Slice_isInit_discriminates_between_Init_and_NotInit();
     snns_Slice_doInit_initializes_slices();
     snns_Slice_makeNew_create_a_slice_in_Init_state();
     snns_Slice_isClear_testGroup();
     snns_Slice_doClear_testGroup();
-
-    puts("All tests passed");
 }
