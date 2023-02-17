@@ -1,0 +1,6 @@
+# No IDE or editor config files
+/.vscode
+
+# No generated code
+/obj
+/bin
