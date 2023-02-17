@@ -84,18 +84,83 @@ void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
     assert(snns_Slice_isInit(&this));
 }
 
-void snns_Slice_isClear_will_report_true_on_an_init_slice(void)
+void snns_Slice_isClear_will_report_true_on_an_Init_slice(void)
 {
+    snns_Slice this = snns_Slice_makeNew();
+    assert(snns_Slice_isClear_linearN(&this));
 }
 
-void snns_Slice_isClear_will_report_false_on_nonInit_slices(void)
+void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null(void)
 {
+
+    // Alloc a slice
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+
+    // Zero out the content
+    assert(alloc_result == snns_Slice_Result_ok);
+    for (size_t i = 0; i < this.cap; ++i)
+    {
+        ((char *)(this.arr))[i] = 0;
+    }
+
+    // Assert a zeroed slice isClear
+    assert(snns_Slice_isClear_linearN(&this));
+
+    // cleanup
+    snns_Slice_dealloc(&this);
+}
+
+void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null(void)
+{
+    // Alloc a slice
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+
+    // Zero out the content to start with a clean slice
+    assert(alloc_result == snns_Slice_Result_ok);
+    for (size_t i = 0; i < this.cap; ++i)
+    {
+        ((char *)(this.arr))[i] = 0;
+    }
+
+    // Alerts on first byte
+    ((char *)(this.arr))[0] = 1;
+    assert(!snns_Slice_isClear_linearN(&this));
+    ((char *)(this.arr))[0] = 0;
+
+    // Alerts on last byte
+    ((char *)(this.arr))[this.cap - 1] = 255;
+    assert(!snns_Slice_isClear_linearN(&this));
+    ((char *)(this.arr))[this.cap - 1] = 0;
+
+    // Alerts on multiple set bytes
+    ((char *)(this.arr))[2] = 60;
+    ((char *)(this.arr))[3] = 120;
+    assert(!snns_Slice_isClear_linearN(&this));
+    ((char *)(this.arr))[2] = 0;
+    ((char *)(this.arr))[3] = 0;
+
+    // Alerts on all set bytes
+    for (size_t i = 0; i < this.cap; ++i)
+    {
+        ((char *)(this.arr))[i] = i + 1;
+    }
+    assert(!snns_Slice_isClear_linearN(&this));
+    
+    snns_Slice_dealloc(&this);
+}
+
+void snns_Slice_isClear_Alloc_group(void)
+{
+    snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null();
+    snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null();
 }
 
 void snns_Slice_isClear_testGroup(void)
 {
-    snns_Slice_isClear_will_report_true_on_an_init_slice();
-    snns_Slice_isClear_will_report_false_on_nonInit_slices();
+    snns_Slice_isClear_will_report_true_on_an_Init_slice();
+    snns_Slice_isClear_Alloc_group();
 }
 
 int main()
@@ -106,4 +171,7 @@ int main()
     snns_Slice_doInit_initializes_slices();
     snns_Slice_makeNew_create_a_slice_in_Init_state();
     snns_Slice_isClear_testGroup();
+    
+    puts("All tests passed");
+    
 }
