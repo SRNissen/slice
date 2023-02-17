@@ -10,6 +10,10 @@ Convenience functions for a C byte slice
     } snns_Slice;
 ```
 
+## Testing
+
+The script `make_and_test.sh` compiles with address- and memory-sanitizer and runs through the tests specified in `test.c`
+
 ## Functions
 
 All functions are described in more detail in `snns_slice.h`
