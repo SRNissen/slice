@@ -147,7 +147,7 @@ void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_
         ((char *)(this.arr))[i] = i + 1;
     }
     assert(!snns_Slice_isClear_linearN(&this));
-    
+
     snns_Slice_dealloc(&this);
 }
 
@@ -163,6 +163,66 @@ void snns_Slice_isClear_testGroup(void)
     snns_Slice_isClear_Alloc_group();
 }
 
+void snns_Slice_doClear_leaves_Init_slices_unchanged(void)
+{
+    snns_Slice this = snns_Slice_makeNew();
+
+    assert(snns_Slice_isInit(&this));
+
+    snns_Slice_doClear(&this);
+
+    assert(snns_Slice_isInit(&this));
+}
+
+void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
+{
+    // Arrange
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result result = snns_Slice_calloc(&this, 5);
+    assert(result == snns_Slice_Result_ok);
+
+    // Act
+    snns_Slice_doClear(&this);
+
+    // Assert
+    assert(snns_Slice_isClear_linearN(&this));
+
+    // Cleanup
+    snns_Slice_dealloc(&this);
+}
+
+void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
+{
+    // ARRANGE
+    // - Alloc a slice
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+    assert(alloc_result == snns_Slice_Result_ok);
+
+    // ARRANGE
+    // - Fill it with something
+    for (size_t i = 0; i < this.cap; ++i)
+    {
+        ((char *)(this.arr))[i] = 28;
+    }
+    
+    // ACT
+    snns_Slice_doClear(&this);
+    
+    // ASSERT
+    assert(snns_Slice_isClear_linearN(&this));
+    
+    // Clean
+    snns_Slice_dealloc(&this);
+}
+
+void snns_Slice_doClear_testGroup()
+{
+    snns_Slice_doClear_leaves_Init_slices_unchanged();
+    snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged();
+    snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
+}
+
 int main()
 {
     puts("Testing snns_Slice functions");
@@ -171,7 +231,7 @@ int main()
     snns_Slice_doInit_initializes_slices();
     snns_Slice_makeNew_create_a_slice_in_Init_state();
     snns_Slice_isClear_testGroup();
-    
+    snns_Slice_doClear_testGroup();
+
     puts("All tests passed");
-    
 }

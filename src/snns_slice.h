@@ -135,6 +135,7 @@ void snns_Slice_doClear(
 // bool isClear_linearN(this)
 /**********************************************************
     Tests if (this->arr) is composed entirely of null bytes
+    NB: Does this with a linear walk of every byte.
 
 (this)
 Init:
