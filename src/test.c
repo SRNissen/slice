@@ -7,6 +7,13 @@
 
 static bool snns_Slice_testBool = false;
 
+static char snns_Slice_testAllocation[20];
+
+static bool snns_ok(snns_Slice_Result result)
+{
+    return result == 0;
+}
+
 static void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
 {
     snns_Slice this;
@@ -231,7 +238,7 @@ static void snns_Slice_doClear_testGroup(void)
 static void *snns_Slice_reporting_malloc(size_t s)
 {
     assert(snns_Slice_testBool == false);
-    snns_Slice_testBool = true+0*s;
+    snns_Slice_testBool = true + 0 * s;
     return NULL;
 }
 
@@ -253,10 +260,10 @@ static void snns_Slice_memory_malloc_can_be_replaced(void)
     snns_Slice_memory.malloc = &malloc;
 }
 
-static void snns_Slice_reporting_free(void* v)
+static void snns_Slice_reporting_free(void *v)
 {
     assert(snns_Slice_testBool == false);
-    snns_Slice_testBool = true + 0*((int)(size_t)v);
+    snns_Slice_testBool = true + 0 * ((int)(size_t)v);
 }
 
 static void snns_Slice_memory_free_can_be_replaced(void)
@@ -279,13 +286,13 @@ static void snns_Slice_memory_free_can_be_replaced(void)
     snns_Slice_testBool = false;
 }
 
-static void *snns_Slice_reporting_realloc(void * v, size_t s)
+static void *snns_Slice_reporting_realloc(void *v, size_t s)
 {
     // silencing "unused parameter" warnings by using them
     size_t pointer = (size_t)v;
-    bool result = true + 0*((int)pointer) + 0*((int)s);
-    assert(result == true);    
-    
+    bool result = true + 0 * ((int)pointer) + 0 * ((int)s);
+    assert(result == true);
+
     // and now we do the actual work of flipping testBool:
     assert(snns_Slice_testBool == false);
     snns_Slice_testBool = result;
@@ -318,18 +325,104 @@ static void snns_Slice_MemoryFunctions_testGroup(void)
     snns_Slice_memory_free_can_be_replaced();
     snns_Slice_memory_realloc_can_be_replaced();
 
-    // No way to test calloc because no function uses it
-    // so far snns_Slice_memory_calloc_can_be_replaced();
+    // cannot test calloc because no function uses it yet
+    // snns_Slice_memory_calloc_can_be_replaced();
+}
+
+static void *snns_Slice_failure_malloc(size_t s)
+{
+    if (s)
+        return NULL;
+    else
+        return NULL;
+}
+
+static void *snns_Slice_success_malloc(size_t s)
+{
+    if (s)
+        return (void *)snns_Slice_testAllocation;
+    else
+        return (void *)snns_Slice_testAllocation;
+}
+
+static void snns_Slice_when_zAlloc_fails_it_returns_badAlloc(void)
+{
+    // Arrange
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result result;
+    snns_Slice_memory.malloc = &snns_Slice_failure_malloc;
+
+    // Act
+    result = snns_Slice_zAlloc(&this, 20);
+
+    // Assert
+    assert(result == snns_Slice_Result_badAlloc);
+
+    // Cleanup
+    snns_Slice_memory.malloc = &malloc;
+}
+
+static void snns_Slice_when_zAlloc_fails_THIS_is_unchanged(void)
+{
+    // Arrange
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_Result result;
+    snns_Slice_memory.malloc = &snns_Slice_failure_malloc;
+
+    // Act
+    result = snns_Slice_zAlloc(&this, 20);
+
+    // Assert
+    assert(result == snns_Slice_Result_badAlloc);
+    assert(snns_Slice_isInit(&this));
+
+    // Cleanup
+    snns_Slice_memory.malloc = &malloc;
+}
+
+static void snns_Slice_when_zAlloc_can_alloc_then_THIS_CAP_is_set_to_the_requested_length(void)
+{
+    // Arrange
+    size_t requested_allocation = 20;
+    snns_Slice_Result result;
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_memory.malloc = &snns_Slice_success_malloc;
+
+    // Act
+    result = snns_Slice_zAlloc(&this, requested_allocation);
+    assert(snns_ok(result));
+
+    // Assert
+    assert(this.cap == requested_allocation);
+
+    // Cleanup
+    snns_Slice_memory.malloc = &malloc;
+}
+
+static void snns_Slice_when_zALloc_is_called_with_non_Init_Slice_it_returns_alreadyAllocated(void)
+{
+    // Arrange
+    snns_Slice_Result result;
+    snns_Slice this = {.cap = 20, .arr = (void*)snns_Slice_testAllocation};
+    
+    // Act
+    result = snns_Slice_zAlloc(&this, 20);
+    
+    // Assert
+    assert(result == snns_Slice_Result_alreadyAllocated);
 }
 
 static void snns_Slice_zAlloc_testGroup(void)
 {
-    
+    snns_Slice_when_zAlloc_fails_it_returns_badAlloc();
+    snns_Slice_when_zAlloc_fails_THIS_is_unchanged();
+    snns_Slice_when_zAlloc_can_alloc_then_THIS_CAP_is_set_to_the_requested_length();
+    snns_Slice_when_zALloc_is_called_with_non_Init_Slice_it_returns_alreadyAllocated();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    puts(argv[0*argc]);
+    puts(argv[0 * argc]);
 
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
