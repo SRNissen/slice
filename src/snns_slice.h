@@ -423,4 +423,11 @@ Aloc,Aloc:
         |
         |(this) is unchanged
         |
-        |returns Result_badAllocn
+        |returns Result_badAlloc
+
+**********************************************************/
+snns_Slice_Result snns_Slice_append(
+    snns_Slice *append_to_this,
+    snns_Slice const *append_from_other);
+
+#endif
