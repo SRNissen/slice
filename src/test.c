@@ -84,6 +84,13 @@ static void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
     assert(snns_Slice_isInit(&this));
 }
 
+static void snns_Slice_Init_testGroup()
+{
+    snns_Slice_isInit_discriminates_between_Init_and_NotInit();
+    snns_Slice_doInit_initializes_slices();
+    snns_Slice_makeNew_create_a_slice_in_Init_state();
+}
+
 static void snns_Slice_isClear_will_report_true_on_an_Init_slice(void)
 {
     snns_Slice this = snns_Slice_makeNew();
@@ -220,6 +227,7 @@ static void snns_Slice_doClear_testGroup()
 
 int main()
 {
+    snns_Slice_Init_testGroup();
     snns_Slice_isInit_discriminates_between_Init_and_NotInit();
     snns_Slice_doInit_initializes_slices();
     snns_Slice_makeNew_create_a_slice_in_Init_state();
