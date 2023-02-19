@@ -169,7 +169,7 @@ void snns_Slice_doClear(
 
 
 
-// Result calloc(this, desired_minimum_capacity)
+// Result zAlloc(this, desired_minimum_capacity)
 /**********************************************************
     Allocates desired capacity (or more) of 0-bytes.
 
@@ -208,13 +208,13 @@ Else:
         |
         |returns Result_alreadyAllocated
 **********************************************************/
-snns_Slice_Result snns_Slice_calloc(
+snns_Slice_Result snns_Slice_zAlloc(
     snns_Slice *this,
     size_t desired_minimum_capacity);
 
 
 
-// Result realloc(this, desired_minimum_capacity)
+// Result reAlloc(this, desired_minimum_capacity)
 /**********************************************************
     Grows allocation to desired capacity. Does not shink
     allocation, even if a smaller allocation is requested
@@ -264,13 +264,13 @@ Alloc:
 Else:
         |Undefined behavior
 **********************************************************/
-snns_Slice_Result snns_Slice_realloc(
+snns_Slice_Result snns_Slice_reAlloc(
     snns_Slice *this,
     size_t desired_minimum_capacity);
 
 
 
-// void dealloc(this)
+// void deAlloc(this)
 /**********************************************************
     Deallocates any buffer and returns (this) to Init state
     
@@ -284,7 +284,7 @@ Alloc:
 Else:
         |Undefined behavior
 **********************************************************/
-void snns_Slice_dealloc(snns_Slice *this);
+void snns_Slice_deAlloc(snns_Slice *this);
 
 
 
@@ -428,10 +428,37 @@ Aloc,Aloc:
         |(this) is unchanged
         |
         |returns Result_badAlloc
-
 **********************************************************/
 snns_Slice_Result snns_Slice_append(
     snns_Slice *append_to_this,
     snns_Slice const *append_from_other);
+
+
+
+// ALLOCATION
+/**********************************************************
+    Slice memory is managed by through
+    the pointers listed below.
+   
+    If you do not modify them, their default targets are
+        |malloc
+        |realloc
+        |calloc
+        |free 
+
+**********************************************************/
+typedef void* (*snns_Slice_Allocator_Ptr)(size_t);
+extern snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr;
+
+typedef void* (*snns_Slice_CAllocator_Ptr)(size_t, size_t);
+extern snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr;
+
+typedef void* (*snns_Slice_ReAllocator_Ptr)(void*, size_t);
+extern snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr;
+
+typedef void (*snns_Slice_Free_Ptr)(void*);
+extern snns_Slice_Free_Ptr snns_slice_free_ptr;
+
+
 
 #endif

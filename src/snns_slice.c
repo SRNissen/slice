@@ -2,6 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr = &malloc;
+snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr = &calloc;
+snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr = &realloc;
+snns_Slice_Free_Ptr snns_slice_free_ptr = &free;
+
 static bool snns_ok(snns_Slice_Result result)
 {
     return result == 0;
@@ -48,7 +53,7 @@ void snns_Slice_doClear(snns_Slice *this)
     }
 }
 
-snns_Slice_Result snns_Slice_calloc(snns_Slice *this, size_t desired_minimum_capacity)
+snns_Slice_Result snns_Slice_zAlloc(snns_Slice *this, size_t desired_minimum_capacity)
 {
     if (!snns_Slice_isInit(this))
     {
@@ -76,11 +81,11 @@ snns_Slice_Result snns_Slice_calloc(snns_Slice *this, size_t desired_minimum_cap
     }
 }
 
-snns_Slice_Result snns_Slice_realloc(snns_Slice *this, size_t desired_minimum_capacity)
+snns_Slice_Result snns_Slice_reAlloc(snns_Slice *this, size_t desired_minimum_capacity)
 {
     if (snns_Slice_isInit(this))
     {
-        return snns_Slice_calloc(this, desired_minimum_capacity);
+        return snns_Slice_zAlloc(this, desired_minimum_capacity);
     }
     else if (desired_minimum_capacity <= this->cap)
     {
@@ -104,7 +109,7 @@ snns_Slice_Result snns_Slice_realloc(snns_Slice *this, size_t desired_minimum_ca
     }
 }
 
-void snns_Slice_dealloc(snns_Slice *this)
+void snns_Slice_deAlloc(snns_Slice *this)
 {
     free(this->arr);
     snns_Slice_doInit(this);
@@ -123,7 +128,7 @@ snns_Slice_Result snns_Slice_copy(snns_Slice *to_this, snns_Slice const *from_ot
     }
     else if (to_this->cap < from_other->cap)
     {
-        snns_Slice_Result reallocResult = snns_Slice_realloc(to_this, from_other->cap);
+        snns_Slice_Result reallocResult = snns_Slice_reAlloc(to_this, from_other->cap);
 
         if (!snns_ok(reallocResult))
         {
@@ -164,7 +169,7 @@ snns_Slice_Result snns_Slice_append(snns_Slice *append_to_this, snns_Slice const
         }
         else
         {
-            snns_Slice_Result reallocResult = snns_Slice_realloc(append_to_this, sum_capacity);
+            snns_Slice_Result reallocResult = snns_Slice_reAlloc(append_to_this, sum_capacity);
 
             if (!snns_ok(reallocResult))
             {

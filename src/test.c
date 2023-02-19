@@ -102,7 +102,7 @@ static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_
 
     // Alloc a slice
     snns_Slice this = snns_Slice_makeNew();
-    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+    snns_Slice_Result alloc_result = snns_Slice_zAlloc(&this, 10);
 
     // Zero out the content
     assert(alloc_result == snns_Slice_Result_ok);
@@ -115,14 +115,14 @@ static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_
     assert(snns_Slice_isClear(&this));
 
     // cleanup
-    snns_Slice_dealloc(&this);
+    snns_Slice_deAlloc(&this);
 }
 
 static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_is_not_null(void)
 {
     // Alloc a slice
     snns_Slice this = snns_Slice_makeNew();
-    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+    snns_Slice_Result alloc_result = snns_Slice_zAlloc(&this, 10);
 
     // Zero out the content to start with a clean slice
     assert(alloc_result == snns_Slice_Result_ok);
@@ -155,7 +155,7 @@ static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_
     }
     assert(!snns_Slice_isClear(&this));
 
-    snns_Slice_dealloc(&this);
+    snns_Slice_deAlloc(&this);
 }
 
 static void snns_Slice_isClear_testGroup(void)
@@ -180,7 +180,7 @@ static void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
 {
     // Arrange
     snns_Slice this = snns_Slice_makeNew();
-    snns_Slice_Result result = snns_Slice_calloc(&this, 5);
+    snns_Slice_Result result = snns_Slice_zAlloc(&this, 5);
     assert(result == snns_Slice_Result_ok);
 
     // Act
@@ -190,7 +190,7 @@ static void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
     assert(snns_Slice_isClear(&this));
 
     // Cleanup
-    snns_Slice_dealloc(&this);
+    snns_Slice_deAlloc(&this);
 }
 
 static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
@@ -198,7 +198,7 @@ static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     // ARRANGE
     // - Alloc a slice
     snns_Slice this = snns_Slice_makeNew();
-    snns_Slice_Result alloc_result = snns_Slice_calloc(&this, 10);
+    snns_Slice_Result alloc_result = snns_Slice_zAlloc(&this, 10);
     assert(alloc_result == snns_Slice_Result_ok);
 
     // ARRANGE
@@ -215,7 +215,7 @@ static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     assert(snns_Slice_isClear(&this));
 
     // Clean
-    snns_Slice_dealloc(&this);
+    snns_Slice_deAlloc(&this);
 }
 
 static void snns_Slice_doClear_testGroup()
@@ -225,9 +225,15 @@ static void snns_Slice_doClear_testGroup()
     snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
 }
 
+static void snns_Slice_calloc_testGroup()
+{
+    
+}
+
 int main()
 {
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
     snns_Slice_doClear_testGroup();
+    snns_Slice_calloc_testGroup();
 }
