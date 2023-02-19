@@ -3,8 +3,6 @@
 echo
 echo "script: make_and_test.sh"
 
-cd ..
-
 ./scripts/clean.sh
 
 ./scripts/compile_asan.sh
@@ -15,5 +13,3 @@ cd ..
 
 ./scripts/compile.sh
 ./scripts/test.sh
-
-cd scripts
