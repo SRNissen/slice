@@ -2,10 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr = &malloc;
-snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr = &calloc;
-snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr = &realloc;
-snns_Slice_Free_Ptr snns_slice_free_ptr = &free;
+snns_Slice_MemoryFunctions snns_Slice_memory =
+{
+    .malloc = &malloc,
+    .calloc = &calloc,
+    .realloc = &realloc,
+    .free = &free
+};
 
 static bool snns_ok(snns_Slice_Result result)
 {
@@ -65,7 +68,7 @@ snns_Slice_Result snns_Slice_zAlloc(snns_Slice *this, size_t desired_minimum_cap
     }
     else
     {
-        void *new_buffer = (*snns_Slice_malloc_ptr)(desired_minimum_capacity);
+        void *new_buffer = (*snns_Slice_memory.malloc)(desired_minimum_capacity);
 
         if (!new_buffer)
         {
@@ -93,7 +96,7 @@ snns_Slice_Result snns_Slice_reAlloc(snns_Slice *this, size_t desired_minimum_ca
     }
     else
     {
-        void *new_arr = (*snns_Slice_realloc_ptr)(this->arr, desired_minimum_capacity);
+        void *new_arr = (*snns_Slice_memory.realloc)(this->arr, desired_minimum_capacity);
 
         if (!new_arr)
         {
@@ -111,7 +114,7 @@ snns_Slice_Result snns_Slice_reAlloc(snns_Slice *this, size_t desired_minimum_ca
 
 void snns_Slice_deAlloc(snns_Slice *this)
 {
-    (*snns_slice_free_ptr)(this->arr);
+    (*snns_Slice_memory.free)(this->arr);
     snns_Slice_doInit(this);
 }
 

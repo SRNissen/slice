@@ -437,26 +437,33 @@ snns_Slice_Result snns_Slice_append(
 
 // ALLOCATION
 /**********************************************************
-    Slice memory is managed by through
-    the pointers listed below.
+    Slice memory is managed by through pointers from the 
+    struct shown below below.
    
     If you do not modify them, their default targets are
         |malloc
         |realloc
         |calloc
         |free 
-
 **********************************************************/
 typedef void* (*snns_Slice_Allocator_Ptr)(size_t);
-extern snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr;
-
 typedef void* (*snns_Slice_CAllocator_Ptr)(size_t, size_t);
-extern snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr;
-
 typedef void* (*snns_Slice_ReAllocator_Ptr)(void*, size_t);
-extern snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr;
-
 typedef void (*snns_Slice_Free_Ptr)(void*);
+
+typedef struct snns_Slice_MemoryFunctions
+{
+    snns_Slice_Allocator_Ptr malloc;
+    snns_Slice_CAllocator_Ptr calloc;
+    snns_Slice_ReAllocator_Ptr realloc;
+    snns_Slice_Free_Ptr free;
+}snns_Slice_MemoryFunctions;
+
+extern snns_Slice_MemoryFunctions snns_Slice_memory;
+
+extern snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr;
+extern snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr;
+extern snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr;
 extern snns_Slice_Free_Ptr snns_slice_free_ptr;
 
 

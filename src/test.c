@@ -225,6 +225,16 @@ static void snns_Slice_doClear_testGroup()
     snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
 }
 
+// static void* snns_Slice_always_null_testFunc()
+// {
+//     return NULL;
+// }
+
+// static void* snns_Slice_never_null_testFunc()
+// {
+//     return NULL;
+// }
+
 static void snns_Slice_calloc_testGroup()
 {
     
