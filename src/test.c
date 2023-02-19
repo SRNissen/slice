@@ -221,21 +221,21 @@ static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     snns_Slice_deAlloc(&this);
 }
 
-static void snns_Slice_doClear_testGroup()
+static void snns_Slice_doClear_testGroup(void)
 {
     snns_Slice_doClear_leaves_Init_slices_unchanged();
     snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged();
     snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
 }
 
-static void *snns_Slice_reporting_malloc()
+static void *snns_Slice_reporting_malloc(void)
 {
     assert(snns_Slice_testBool == false);
     snns_Slice_testBool = true;
     return NULL;
 }
 
-static void snns_Slice_memory_malloc_can_be_replaced()
+static void snns_Slice_memory_malloc_can_be_replaced(void)
 {
     // Arrange
     snns_Slice this = snns_Slice_makeNew();
@@ -253,13 +253,13 @@ static void snns_Slice_memory_malloc_can_be_replaced()
     snns_Slice_memory.malloc = &malloc;
 }
 
-static void snns_Slice_reporting_free()
+static void snns_Slice_reporting_free(void)
 {
     assert(snns_Slice_testBool == false);
     snns_Slice_testBool = true;
 }
 
-static void snns_Slice_memory_free_can_be_replaced()
+static void snns_Slice_memory_free_can_be_replaced(void)
 {
     // Arrange
     snns_Slice this = {
@@ -292,7 +292,7 @@ static void *snns_Slice_reporting_realloc(void * v, size_t s)
     return NULL;
 }
 
-static void snns_Slice_memory_realloc_can_be_replaced()
+static void snns_Slice_memory_realloc_can_be_replaced(void)
 {
     // Arrange
     snns_Slice this = {
@@ -312,7 +312,7 @@ static void snns_Slice_memory_realloc_can_be_replaced()
     snns_Slice_testBool = false;
 }
 
-static void snns_Slice_MemoryFunctions_testGroup()
+static void snns_Slice_MemoryFunctions_testGroup(void)
 {
     snns_Slice_memory_malloc_can_be_replaced();
     snns_Slice_memory_free_can_be_replaced();
@@ -322,10 +322,20 @@ static void snns_Slice_MemoryFunctions_testGroup()
     // so far snns_Slice_memory_calloc_can_be_replaced();
 }
 
-int main()
+static void snns_Slice_zAlloc_testGroup(void)
 {
+    
+}
+
+int main(int argc, char** argv)
+{
+    puts(argv[0*argc]);
+
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
     snns_Slice_doClear_testGroup();
     snns_Slice_MemoryFunctions_testGroup();
+    snns_Slice_zAlloc_testGroup();
+
+    puts("---All tests passed");
 }

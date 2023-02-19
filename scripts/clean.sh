@@ -1,7 +1,6 @@
 #!/bin/sh
 # This is a comment!
 
-echo
 echo "script: clean.sh"
 
 cd obj

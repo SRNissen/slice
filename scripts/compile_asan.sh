@@ -1,7 +1,6 @@
 #!/bin/sh
 # This is a comment!
 
-echo
 echo "script: compile_asan.sh"
 
 cd src
