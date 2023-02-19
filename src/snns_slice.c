@@ -65,7 +65,7 @@ snns_Slice_Result snns_Slice_zAlloc(snns_Slice *this, size_t desired_minimum_cap
     }
     else
     {
-        void *new_buffer = malloc(desired_minimum_capacity);
+        void *new_buffer = (*snns_Slice_malloc_ptr)(desired_minimum_capacity);
 
         if (!new_buffer)
         {
@@ -93,7 +93,7 @@ snns_Slice_Result snns_Slice_reAlloc(snns_Slice *this, size_t desired_minimum_ca
     }
     else
     {
-        void *new_arr = realloc(this->arr, desired_minimum_capacity);
+        void *new_arr = (*snns_Slice_realloc_ptr)(this->arr, desired_minimum_capacity);
 
         if (!new_arr)
         {
@@ -111,7 +111,7 @@ snns_Slice_Result snns_Slice_reAlloc(snns_Slice *this, size_t desired_minimum_ca
 
 void snns_Slice_deAlloc(snns_Slice *this)
 {
-    free(this->arr);
+    (*snns_slice_free_ptr)(this->arr);
     snns_Slice_doInit(this);
 }
 
