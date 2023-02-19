@@ -11,5 +11,8 @@ echo "script: make_and_test.sh"
 ./scripts/compile_msan.sh
 ./scripts/test_msan.sh
 
+./scripts/compile_usan.sh
+./scripts/test_usan.sh
+
 ./scripts/compile.sh
 ./scripts/test.sh

@@ -43,4 +43,18 @@ cd san
 
     cd ..
     
+        cd usan
+
+        cd bin
+            touch cleaningdummy
+            rm *
+        cd ..
+
+        cd obj
+            touch cleaningdummy
+            rm *
+        cd ..
+
+    cd ..
+    
 cd ..
