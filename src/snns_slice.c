@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-snns_Slice_MemoryFunctions snns_Slice_memory =
-{
+snns_Slice_MemoryFunctions snns_Slice_memory = {
     .malloc = &malloc,
     .calloc = &calloc,
     .realloc = &realloc,

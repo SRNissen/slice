@@ -171,7 +171,7 @@ void snns_Slice_doClear(
 
 // Result zAlloc(this, desired_minimum_capacity)
 /**********************************************************
-    Allocates desired capacity (or more) of 0-bytes.
+    Allocates desired capacity of 0-initialized bytes.
 
 (desired_minimum_capacity == 0)
 (this)
@@ -435,10 +435,10 @@ snns_Slice_Result snns_Slice_append(
 
 
 
-// ALLOCATION
+// extern snns_Slice_memory
 /**********************************************************
     Slice memory is managed by through pointers from the 
-    struct shown below below.
+    extern struct snns_Slice_memory.
    
     If you do not modify them, their default targets are
         |malloc
@@ -446,26 +446,14 @@ snns_Slice_Result snns_Slice_append(
         |calloc
         |free 
 **********************************************************/
-typedef void* (*snns_Slice_Allocator_Ptr)(size_t);
-typedef void* (*snns_Slice_CAllocator_Ptr)(size_t, size_t);
-typedef void* (*snns_Slice_ReAllocator_Ptr)(void*, size_t);
-typedef void (*snns_Slice_Free_Ptr)(void*);
-
 typedef struct snns_Slice_MemoryFunctions
 {
-    snns_Slice_Allocator_Ptr malloc;
-    snns_Slice_CAllocator_Ptr calloc;
-    snns_Slice_ReAllocator_Ptr realloc;
-    snns_Slice_Free_Ptr free;
-}snns_Slice_MemoryFunctions;
+    void*(*malloc)(size_t);
+    void*(*calloc)(size_t,size_t);
+    void*(*realloc)(void*,size_t);
+    void(*free)(void*);
+    } snns_Slice_MemoryFunctions;
 
 extern snns_Slice_MemoryFunctions snns_Slice_memory;
-
-extern snns_Slice_Allocator_Ptr snns_Slice_malloc_ptr;
-extern snns_Slice_CAllocator_Ptr snns_Slice_calloc_ptr;
-extern snns_Slice_ReAllocator_Ptr snns_Slice_realloc_ptr;
-extern snns_Slice_Free_Ptr snns_slice_free_ptr;
-
-
 
 #endif

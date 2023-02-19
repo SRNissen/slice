@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdlib.h>
+
+static bool snns_Slice_testBool = false;
 
 static void snns_Slice_isInit_discriminates_between_Init_and_NotInit(void)
 {
@@ -225,19 +228,98 @@ static void snns_Slice_doClear_testGroup()
     snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
 }
 
-// static void* snns_Slice_always_null_testFunc()
-// {
-//     return NULL;
-// }
-
-// static void* snns_Slice_never_null_testFunc()
-// {
-//     return NULL;
-// }
-
-static void snns_Slice_calloc_testGroup()
+static void *snns_Slice_reporting_malloc()
 {
+    assert(snns_Slice_testBool == false);
+    snns_Slice_testBool = true;
+    return NULL;
+}
+
+static void snns_Slice_memory_malloc_can_be_replaced()
+{
+    // Arrange
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_testBool = false;
+    snns_Slice_memory.malloc = &snns_Slice_reporting_malloc;
+
+    // Act
+    snns_Slice_zAlloc(&this, 2);
+
+    // Assert
+    assert(snns_Slice_testBool == true);
+
+    // cleanup
+    snns_Slice_testBool = false;
+    snns_Slice_memory.malloc = &malloc;
+}
+
+static void snns_Slice_reporting_free()
+{
+    assert(snns_Slice_testBool == false);
+    snns_Slice_testBool = true;
+}
+
+static void snns_Slice_memory_free_can_be_replaced()
+{
+    // Arrange
+    snns_Slice this = {
+        .arr = (void *)2,
+        .cap = 2};
+    snns_Slice_memory.free = &snns_Slice_reporting_free;
+    snns_Slice_testBool = false;
+
+    // Act
+    snns_Slice_deAlloc(&this);
+
+    // Assert
+    assert(snns_Slice_testBool == true);
+
+    // Cleanup
+    snns_Slice_memory.free = &free;
+    snns_Slice_testBool = false;
+}
+
+static void *snns_Slice_reporting_realloc(void * v, size_t s)
+{
+    // silencing "unused parameter" warnings by using them
+    size_t pointer = (size_t)v;
+    bool result = true + 0*((int)pointer) + 0*((int)s);
+    assert(result == true);    
     
+    // and now we do the actual work of flipping testBool:
+    assert(snns_Slice_testBool == false);
+    snns_Slice_testBool = result;
+    return NULL;
+}
+
+static void snns_Slice_memory_realloc_can_be_replaced()
+{
+    // Arrange
+    snns_Slice this = {
+        .arr = (void *)2,
+        .cap = 2};
+    snns_Slice_memory.realloc = &snns_Slice_reporting_realloc;
+    snns_Slice_testBool = false;
+
+    // Act
+    snns_Slice_reAlloc(&this, this.cap + 1);
+
+    // Assert
+    assert(snns_Slice_testBool == true);
+
+    // Cleanup
+    snns_Slice_memory.realloc = &realloc;
+    snns_Slice_testBool = false;
+}
+
+static void snns_Slice_MemoryFunctions_testGroup()
+{
+    snns_Slice_memory_malloc_can_be_replaced();
+    snns_Slice_memory_free_can_be_replaced();
+    snns_Slice_memory_realloc_can_be_replaced();
+
+    // No way to test calloc because no function uses it
+    // so far snns_Slice_memory_calloc_can_be_replaced();
 }
 
 int main()
@@ -245,5 +327,5 @@ int main()
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
     snns_Slice_doClear_testGroup();
-    snns_Slice_calloc_testGroup();
+    snns_Slice_MemoryFunctions_testGroup();
 }
