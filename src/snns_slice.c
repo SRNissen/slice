@@ -7,7 +7,6 @@ static bool snns_ok(snns_Slice_Result result)
     return result == 0;
 }
 
-
 snns_Slice snns_Slice_makeNew(void)
 {
     snns_Slice this;
@@ -15,12 +14,10 @@ snns_Slice snns_Slice_makeNew(void)
     return this;
 }
 
-
 void snns_Slice_doInit(snns_Slice *this)
 {
     memset(this, 0, sizeof(snns_Slice));
 }
-
 
 bool snns_Slice_isInit(snns_Slice const *this)
 {
@@ -28,6 +25,15 @@ bool snns_Slice_isInit(snns_Slice const *this)
            this->cap == 0;
 }
 
+bool snns_Slice_isClear(snns_Slice const *this)
+{
+    char clear = 0;
+
+    for (size_t i = 0; i < this->cap; ++i)
+        clear |= ((char *)(this->arr))[i];
+
+    return clear == 0;
+}
 
 void snns_Slice_doClear(snns_Slice *this)
 {
@@ -41,18 +47,6 @@ void snns_Slice_doClear(snns_Slice *this)
         return;
     }
 }
-
-
-bool snns_Slice_isClear_linearN(snns_Slice const *this)
-{
-    char clear = 0;
-
-    for (size_t i = 0; i < this->cap; ++i)
-        clear |= ((char *)(this->arr))[i];
-
-    return clear == 0;
-}
-
 
 snns_Slice_Result snns_Slice_calloc(snns_Slice *this, size_t desired_minimum_capacity)
 {
@@ -82,7 +76,6 @@ snns_Slice_Result snns_Slice_calloc(snns_Slice *this, size_t desired_minimum_cap
     }
 }
 
-
 snns_Slice_Result snns_Slice_realloc(snns_Slice *this, size_t desired_minimum_capacity)
 {
     if (snns_Slice_isInit(this))
@@ -111,13 +104,11 @@ snns_Slice_Result snns_Slice_realloc(snns_Slice *this, size_t desired_minimum_ca
     }
 }
 
-
 void snns_Slice_dealloc(snns_Slice *this)
 {
     free(this->arr);
     snns_Slice_doInit(this);
 }
-
 
 snns_Slice_Result snns_Slice_copy(snns_Slice *to_this, snns_Slice const *from_other)
 {
@@ -152,7 +143,6 @@ snns_Slice_Result snns_Slice_copy(snns_Slice *to_this, snns_Slice const *from_ot
     }
 }
 
-
 snns_Slice_Result snns_Slice_append(snns_Slice *append_to_this, snns_Slice const *append_from_other)
 {
     if (snns_Slice_isInit(append_from_other))
@@ -185,7 +175,7 @@ snns_Slice_Result snns_Slice_append(snns_Slice *append_to_this, snns_Slice const
                 memcpy((append_to_this->arr) + (append_to_this->cap),
                        append_from_other->arr,
                        append_from_other->cap);
-                return snns_Slice_Result_ok; 
+                return snns_Slice_Result_ok;
             }
         }
     }

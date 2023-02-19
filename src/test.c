@@ -94,7 +94,7 @@ static void snns_Slice_Init_testGroup()
 static void snns_Slice_isClear_will_report_true_on_an_Init_slice(void)
 {
     snns_Slice this = snns_Slice_makeNew();
-    assert(snns_Slice_isClear_linearN(&this));
+    assert(snns_Slice_isClear(&this));
 }
 
 static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_are_null(void)
@@ -112,7 +112,7 @@ static void snns_Slice_isClear_will_report_true_on_Alloc_slices_where_all_bytes_
     }
 
     // Assert a zeroed slice isClear
-    assert(snns_Slice_isClear_linearN(&this));
+    assert(snns_Slice_isClear(&this));
 
     // cleanup
     snns_Slice_dealloc(&this);
@@ -133,18 +133,18 @@ static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_
 
     // Alerts on first byte
     ((this.arr))[0] = 1;
-    assert(!snns_Slice_isClear_linearN(&this));
+    assert(!snns_Slice_isClear(&this));
     ((this.arr))[0] = 0;
 
     // Alerts on last byte
     ((this.arr))[this.cap - 1] = 127;
-    assert(!snns_Slice_isClear_linearN(&this));
+    assert(!snns_Slice_isClear(&this));
     ((this.arr))[this.cap - 1] = 0;
 
     // Alerts on multiple set bytes
     ((this.arr))[2] = 60;
     ((this.arr))[3] = 120;
-    assert(!snns_Slice_isClear_linearN(&this));
+    assert(!snns_Slice_isClear(&this));
     ((this.arr))[2] = 0;
     ((this.arr))[3] = 0;
 
@@ -153,7 +153,7 @@ static void snns_Slice_isClear_will_report_false_on_Alloc_slices_where_any_byte_
     {
         (this.arr)[i] = (char)(i + 1);
     }
-    assert(!snns_Slice_isClear_linearN(&this));
+    assert(!snns_Slice_isClear(&this));
 
     snns_Slice_dealloc(&this);
 }
@@ -187,7 +187,7 @@ static void snns_Slice_doClear_leaves_zeroed_Alloc_slices_unchanged(void)
     snns_Slice_doClear(&this);
 
     // Assert
-    assert(snns_Slice_isClear_linearN(&this));
+    assert(snns_Slice_isClear(&this));
 
     // Cleanup
     snns_Slice_dealloc(&this);
@@ -212,7 +212,7 @@ static void snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes(void)
     snns_Slice_doClear(&this);
 
     // ASSERT
-    assert(snns_Slice_isClear_linearN(&this));
+    assert(snns_Slice_isClear(&this));
 
     // Clean
     snns_Slice_dealloc(&this);
@@ -228,9 +228,6 @@ static void snns_Slice_doClear_testGroup()
 int main()
 {
     snns_Slice_Init_testGroup();
-    snns_Slice_isInit_discriminates_between_Init_and_NotInit();
-    snns_Slice_doInit_initializes_slices();
-    snns_Slice_makeNew_create_a_slice_in_Init_state();
     snns_Slice_isClear_testGroup();
     snns_Slice_doClear_testGroup();
 }

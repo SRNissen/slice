@@ -107,32 +107,7 @@ bool snns_Slice_isInit(
 
 
 
-// void doClear(this)
-/**********************************************************
-    Memset slice to null-bytes.
-    
-! ! Uses Memset! Not a security function ! !
-
-    If you need a secure memset before dealloc, use
-    memset_explicit (C23) or, if you don't have C23, look
-    up "secure memset" in your favorite reference source
-
-(this)
-Init:
-        |(this) is unchanged
-
-Alloc:
-        |All allocated bytes set to null
-
-Else:
-        |Undefined behavior
-**********************************************************/
-void snns_Slice_doClear(
-    snns_Slice *this);
-
-
-
-// bool isClear_linearN(this)
+// bool isClear(this)
 /**********************************************************
     Tests if (this->arr) is composed entirely of null bytes
     NB: Does this with a linear walk of every byte.
@@ -161,8 +136,37 @@ Alloc:
 Else:
         |Undefined behavior
 **********************************************************/
-bool snns_Slice_isClear_linearN(
+bool snns_Slice_isClear(
     snns_Slice const *this);
+
+
+
+// void doClear(this)
+/**********************************************************
+    Memset slice to null-bytes.
+    
+! ! Uses Memset! Not a security function ! !
+
+    If you need a secure memset before dealloc, use
+    memset_explicit (C23) or, if you don't have C23, look
+    up "secure memset" in your favorite reference source
+
+(this)
+Init:
+        |(this) is unchanged
+
+Alloc:
+        |All allocated bytes set to null
+
+Else:
+        |Undefined behavior
+**********************************************************/
+void snns_Slice_doClear(
+    snns_Slice *this);
+
+
+
+
 
 
 // Result calloc(this, desired_minimum_capacity)
