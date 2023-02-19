@@ -87,7 +87,7 @@ static void snns_Slice_makeNew_create_a_slice_in_Init_state(void)
     assert(snns_Slice_isInit(&this));
 }
 
-static void snns_Slice_Init_testGroup()
+static void snns_Slice_Init_testGroup(void)
 {
     snns_Slice_isInit_discriminates_between_Init_and_NotInit();
     snns_Slice_doInit_initializes_slices();
@@ -228,10 +228,10 @@ static void snns_Slice_doClear_testGroup(void)
     snns_Slice_doClear_zeroes_out_Alloc_slices_with_set_bytes();
 }
 
-static void *snns_Slice_reporting_malloc(void)
+static void *snns_Slice_reporting_malloc(size_t s)
 {
     assert(snns_Slice_testBool == false);
-    snns_Slice_testBool = true;
+    snns_Slice_testBool = true+0*s;
     return NULL;
 }
 
@@ -253,10 +253,10 @@ static void snns_Slice_memory_malloc_can_be_replaced(void)
     snns_Slice_memory.malloc = &malloc;
 }
 
-static void snns_Slice_reporting_free(void)
+static void snns_Slice_reporting_free(void* v)
 {
     assert(snns_Slice_testBool == false);
-    snns_Slice_testBool = true;
+    snns_Slice_testBool = true + 0*((int)(size_t)v);
 }
 
 static void snns_Slice_memory_free_can_be_replaced(void)
