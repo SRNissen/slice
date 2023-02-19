@@ -239,22 +239,6 @@ static void snns_Slice_reporting_free(void *v)
     snns_Slice_testBool = (size_t)v || true;
 }
 
-// static void *snns_Slice_failure_malloc(size_t s)
-// {
-//     if (s)
-//         return NULL;
-//     else
-//         return NULL;
-// }
-
-// static void *snns_Slice_success_malloc(size_t s)
-// {
-//     if (s)
-//         return (void *)snns_Slice_testAllocation_QQ;
-//     else
-//         return (void *)snns_Slice_testAllocation_WW;
-// }
-
 static bool snns_ok(snns_Slice_Result result)
 {
     return result == 0;
