@@ -212,7 +212,7 @@ static void *snns_Slice_testingRealloc(void *v, size_t s)
     }
 }
 
-static void snns_Slice_test_fixtures_set_up_custom_memory_handlers()
+static void snns_Slice_test_fixtures_set_up_custom_memory_handlers(void)
 {
     snns_Slice_memory.malloc = &snns_Slice_testingMalloc;
     snns_Slice_memory.free = &snns_Slice_testingFree;
@@ -604,7 +604,7 @@ static void snns_Slice_when_zAlloc_any_bytes_to_non_Init_slice(void)
     assert(this.cap == 20 && this.arr == (void *)snns_Slice_testAllocation_QQ);
 }
 
-static void snns_Slice_when_zAlloc_ten_bytes_to_Init_slice()
+static void snns_Slice_when_zAlloc_ten_bytes_to_Init_slice(void)
 {
     /*
     Expected outcome of allocating 10 bytes to a slice
