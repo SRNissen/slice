@@ -695,20 +695,46 @@ static void snns_Slice_reAlloc_zero_bytes_to_init_slice(void)
 
 static void snns_Slice_reAlloc_some_bytes_to_init_slice(void)
 {
-    //arrange
+    // arrange
     snns_Slice this;
     snns_Slice_Result result;
 
-    //act
+    // act
     this = snns_Slice_makeNew();
     result = snns_Slice_reAlloc(&this, 5);
-    
-    //assert
+
+    // assert
     assert(result == snns_Slice_Result_ok);
     assert(this.arr != NULL);
     assert(this.cap >= 5);
+
+    //cleanup
+    snns_Slice_deAlloc(&this);
+
 }
-// static void snns_Slice_reAlloc_too_many_bytes_to_init_slice(void) {assert(false);}
+
+static void snns_Slice_reAlloc_too_many_bytes_to_init_slice(void)
+{
+    //Arrange
+    snns_Slice this;
+    snns_Slice_Result result;
+
+    snns_Slice_test_fixtures_doClean();
+    snns_Slice_test_fixtures_set_up_custom_memory_handlers();
+    
+    this = snns_Slice_makeNew();
+
+    //Act
+    result = snns_Slice_reAlloc(&this, SNNS_SLICE_TESTALLOCATION_SIZE+1);
+
+    //Assert
+    assert(result == snns_Slice_Result_badAlloc);
+    assert(snns_Slice_isInit(&this));
+
+    //cleanup
+    snns_Slice_test_fixtures_doClean();
+    snns_Slice_test_fixtures_assert_areClean();
+}
 // static void snns_Slice_reAlloc_zero_bytes_to_allocated_slice(void) {assert(false);}
 // static void snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice(void) {assert(false);}
 // static void snns_Slice_reAlloc_more_bytes_than_already_allocated_to_allocated_slice(void) {assert(false);}
@@ -718,7 +744,7 @@ static void snns_Slice_reAlloc_testGroup(void)
 {
     snns_Slice_reAlloc_zero_bytes_to_init_slice();
     snns_Slice_reAlloc_some_bytes_to_init_slice();
-    // snns_Slice_reAlloc_too_many_bytes_to_init_slice();
+    snns_Slice_reAlloc_too_many_bytes_to_init_slice();
     // snns_Slice_reAlloc_zero_bytes_to_allocated_slice();
     // snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice();
     // snns_Slice_reAlloc_more_bytes_than_already_allocated_to_allocated_slice();
