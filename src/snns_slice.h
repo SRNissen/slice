@@ -452,7 +452,7 @@ typedef struct snns_Slice_MemoryFunctions
     void*(*calloc)(size_t,size_t);
     void*(*realloc)(void*,size_t);
     void(*free)(void*);
-    } snns_Slice_MemoryFunctions;
+} snns_Slice_MemoryFunctions;
 
 extern snns_Slice_MemoryFunctions snns_Slice_memory;
 

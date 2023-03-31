@@ -607,6 +607,9 @@ static void snns_Slice_zAlloc_any_bytes_to_non_Init_slice(void)
 
     //      (3) slice had better be exactly as it started
     assert(this.cap == 20 && this.arr == (void *)snns_Slice_testAllocation_QQ);
+
+    snns_Slice_test_fixtures_doClean();
+    snns_Slice_test_fixtures_assert_areClean();
 }
 
 static void snns_Slice_zAlloc_ten_bytes_to_Init_slice(void)
@@ -682,9 +685,29 @@ static void snns_Slice_zAlloc_testGroup(void)
 
 static void snns_Slice_reAlloc_zero_bytes_to_init_slice(void)
 {
-    
+    snns_Slice this = snns_Slice_makeNew();
+
+    snns_Slice_Result result = snns_Slice_reAlloc(&this, 0);
+
+    assert(result == snns_Slice_Result_ok);
+    assert(snns_Slice_isInit(&this));
 }
-// static void snns_Slice_reAlloc_some_bytes_to_init_slice(void) {assert(false);}
+
+static void snns_Slice_reAlloc_some_bytes_to_init_slice(void)
+{
+    //arrange
+    snns_Slice this;
+    snns_Slice_Result result;
+
+    //act
+    this = snns_Slice_makeNew();
+    result = snns_Slice_reAlloc(&this, 5);
+    
+    //assert
+    assert(result == snns_Slice_Result_ok);
+    assert(this.arr != NULL);
+    assert(this.cap >= 5);
+}
 // static void snns_Slice_reAlloc_too_many_bytes_to_init_slice(void) {assert(false);}
 // static void snns_Slice_reAlloc_zero_bytes_to_allocated_slice(void) {assert(false);}
 // static void snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice(void) {assert(false);}
@@ -694,7 +717,7 @@ static void snns_Slice_reAlloc_zero_bytes_to_init_slice(void)
 static void snns_Slice_reAlloc_testGroup(void)
 {
     snns_Slice_reAlloc_zero_bytes_to_init_slice();
-    // snns_Slice_reAlloc_some_bytes_to_init_slice();
+    snns_Slice_reAlloc_some_bytes_to_init_slice();
     // snns_Slice_reAlloc_too_many_bytes_to_init_slice();
     // snns_Slice_reAlloc_zero_bytes_to_allocated_slice();
     // snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice();
@@ -704,7 +727,7 @@ static void snns_Slice_reAlloc_testGroup(void)
 
 int main(int argc, char **argv)
 {
-    puts(argv[0 * argc]); //multiplying by argc to silence -Wunused-parameter
+    puts(argv[0 * argc]); // multiplying by argc to silence -Wunused-parameter
 
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
