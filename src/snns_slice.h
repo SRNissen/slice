@@ -1,8 +1,8 @@
 #ifndef SNNS_SLICE_H
 #define SNNS_SLICE_H
 
-#include <stddef.h>  //For bool params
-#include <stdbool.h> //For size_t params
+#include <stddef.h>  //For size_t params
+#include <stdbool.h> //For bool params
 
 // namespace snns
 /**********************************************************

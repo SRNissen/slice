@@ -137,22 +137,27 @@ static void snns_Slice_testingFree(void *v)
     else if (v == snns_Slice_testAllocation_QQ)
     {
         snns_Slice_testAllocation_QQ_is_allocated = false;
+        return;
     }
     else if (v == snns_Slice_testAllocation_WW)
     {
         snns_Slice_testAllocation_WW_is_allocated = false;
+        return;
     }
     else if (v == snns_Slice_testAllocation_XX)
     {
         snns_Slice_testAllocation_XX_is_allocated = false;
+        return;
     }
     else if (v == snns_Slice_testAllocation_YY)
     {
         snns_Slice_testAllocation_YY_is_allocated = false;
+        return;
     }
     else if (v == snns_Slice_testAllocation_ZZ)
     {
         snns_Slice_testAllocation_ZZ_is_allocated = false;
+        return;
     }
 
     assert("Why are you freeing this pointer" == NULL);
@@ -535,7 +540,7 @@ static void snns_Slice_MemoryFunctions_testGroup(void)
     // snns_Slice_memory_calloc_can_be_replaced();
 }
 
-static void snns_Slice_when_zAlloc_zero_bytes_to_Init_Slice(void)
+static void snns_Slice_zAlloc_zero_bytes_to_Init_Slice(void)
 {
     /*
     Expected outcome of allocating zero bytes to a slice
@@ -557,7 +562,7 @@ static void snns_Slice_when_zAlloc_zero_bytes_to_Init_Slice(void)
     // Assert
     //      (1) reporting_malloc did not get called and set
     //          testBool to true;
-    assert(snns_Slice_testBool == false);
+    assert(!snns_Slice_testBool == true);
 
     //      (2) and that's fine - you didn't want anything
     //          malloced and didn't GET anything malloced
@@ -571,7 +576,7 @@ static void snns_Slice_when_zAlloc_zero_bytes_to_Init_Slice(void)
     snns_Slice_memory.malloc = &malloc;
 }
 
-static void snns_Slice_when_zAlloc_any_bytes_to_non_Init_slice(void)
+static void snns_Slice_zAlloc_any_bytes_to_non_Init_slice(void)
 {
     /*
     Expected outcome of allocating any bytes to a slice
@@ -604,7 +609,7 @@ static void snns_Slice_when_zAlloc_any_bytes_to_non_Init_slice(void)
     assert(this.cap == 20 && this.arr == (void *)snns_Slice_testAllocation_QQ);
 }
 
-static void snns_Slice_when_zAlloc_ten_bytes_to_Init_slice(void)
+static void snns_Slice_zAlloc_ten_bytes_to_Init_slice(void)
 {
     /*
     Expected outcome of allocating 10 bytes to a slice
@@ -637,15 +642,41 @@ static void snns_Slice_when_zAlloc_ten_bytes_to_Init_slice(void)
     snns_Slice_test_fixtures_assert_areClean();
 }
 
-static void snns_Slice_when_zAlloc_thirty_bytes_to_Init_slice(void)
-{}
+static void snns_Slice_zAlloc_too_many_bytes_to_Init_slice(void)
+{
+    /*
+    Starting with a slice "this" in the Init state, the
+    expected outcome of attempting to allocate more bytes
+    than malloc can supply is
+    (1) a return of Result_badAlloc
+    (2) a slice that remains in the init state.
+    */
+    
+    // Arrange
+    snns_Slice_Result result;
+    snns_Slice this = snns_Slice_makeNew();
+    snns_Slice_test_fixtures_doClean();
+    snns_Slice_test_fixtures_set_up_custom_memory_handlers();
+    
+
+    // Act
+    result = snns_Slice_zAlloc(&this, SNNS_SLICE_TESTALLOCATION_SIZE+1);
+
+    // Assert
+    assert(result == snns_Slice_Result_badAlloc );
+    assert(snns_Slice_isInit(&this));
+
+    // Cleanup
+    snns_Slice_test_fixtures_doClean();
+    snns_Slice_test_fixtures_assert_areClean();
+}
 
 static void snns_Slice_zAlloc_testGroup(void)
 {
-    snns_Slice_when_zAlloc_zero_bytes_to_Init_Slice();
-    snns_Slice_when_zAlloc_any_bytes_to_non_Init_slice();
-    snns_Slice_when_zAlloc_ten_bytes_to_Init_slice();
-    snns_Slice_when_zAlloc_thirty_bytes_to_Init_slice();
+    snns_Slice_zAlloc_zero_bytes_to_Init_Slice();
+    snns_Slice_zAlloc_any_bytes_to_non_Init_slice();
+    snns_Slice_zAlloc_ten_bytes_to_Init_slice();
+    snns_Slice_zAlloc_too_many_bytes_to_Init_slice();
 }
 
 int main(int argc, char **argv)
