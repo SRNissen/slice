@@ -229,7 +229,7 @@ Init:
 Else:
         |(this) is unchanged
         |
-        |returns Result_alreadyAllocated
+        |returns Result_ok
 
 
 (desired_minimum_capacity <= (this->cap))

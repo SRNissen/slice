@@ -621,13 +621,12 @@ static void snns_Slice_zAlloc_ten_bytes_to_Init_slice(void)
         to the specific memory location we know we'll get
         back from that malloc implementation.
     */
-    
+
     // Arrange
     snns_Slice_Result result;
     snns_Slice this = snns_Slice_makeNew();
     snns_Slice_test_fixtures_doClean();
     snns_Slice_test_fixtures_set_up_custom_memory_handlers();
-    
 
     // Act
     result = snns_Slice_zAlloc(&this, 10);
@@ -651,19 +650,18 @@ static void snns_Slice_zAlloc_too_many_bytes_to_Init_slice(void)
     (1) a return of Result_badAlloc
     (2) a slice that remains in the init state.
     */
-    
+
     // Arrange
     snns_Slice_Result result;
     snns_Slice this = snns_Slice_makeNew();
     snns_Slice_test_fixtures_doClean();
     snns_Slice_test_fixtures_set_up_custom_memory_handlers();
-    
 
     // Act
-    result = snns_Slice_zAlloc(&this, SNNS_SLICE_TESTALLOCATION_SIZE+1);
+    result = snns_Slice_zAlloc(&this, SNNS_SLICE_TESTALLOCATION_SIZE + 1);
 
     // Assert
-    assert(result == snns_Slice_Result_badAlloc );
+    assert(result == snns_Slice_Result_badAlloc);
     assert(snns_Slice_isInit(&this));
 
     // Cleanup
@@ -673,23 +671,40 @@ static void snns_Slice_zAlloc_too_many_bytes_to_Init_slice(void)
 
 static void snns_Slice_zAlloc_testGroup(void)
 {
-    //Alloc to an INIT slice
+    // Alloc to an INIT slice
     snns_Slice_zAlloc_zero_bytes_to_Init_Slice();
     snns_Slice_zAlloc_ten_bytes_to_Init_slice();
     snns_Slice_zAlloc_too_many_bytes_to_Init_slice();
 
-    //Alloc to non-INIT slice
+    // Alloc to non-INIT slice
     snns_Slice_zAlloc_any_bytes_to_non_Init_slice();
 }
 
-static void snns_Slice_reAlloc_testGroup(void)
+static void snns_Slice_reAlloc_zero_bytes_to_init_slice(void)
 {
     
+}
+// static void snns_Slice_reAlloc_some_bytes_to_init_slice(void) {assert(false);}
+// static void snns_Slice_reAlloc_too_many_bytes_to_init_slice(void) {assert(false);}
+// static void snns_Slice_reAlloc_zero_bytes_to_allocated_slice(void) {assert(false);}
+// static void snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice(void) {assert(false);}
+// static void snns_Slice_reAlloc_more_bytes_than_already_allocated_to_allocated_slice(void) {assert(false);}
+// static void snns_Slice_reAlloc_too_many_bytes_to_allocated_slice(void) {assert(false);}
+
+static void snns_Slice_reAlloc_testGroup(void)
+{
+    snns_Slice_reAlloc_zero_bytes_to_init_slice();
+    // snns_Slice_reAlloc_some_bytes_to_init_slice();
+    // snns_Slice_reAlloc_too_many_bytes_to_init_slice();
+    // snns_Slice_reAlloc_zero_bytes_to_allocated_slice();
+    // snns_Slice_reAlloc_fewer_bytes_than_already_allocated_to_allocated_slice();
+    // snns_Slice_reAlloc_more_bytes_than_already_allocated_to_allocated_slice();
+    // snns_Slice_reAlloc_too_many_bytes_to_allocated_slice();
 }
 
 int main(int argc, char **argv)
 {
-    puts(argv[0 * argc]);
+    puts(argv[0 * argc]); //multiplying by argc to silence -Wunused-parameter
 
     snns_Slice_Init_testGroup();
     snns_Slice_isClear_testGroup();
