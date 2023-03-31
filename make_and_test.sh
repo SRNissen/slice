@@ -3,6 +3,8 @@
 echo
 echo "script: make_and_test.sh"
 echo
+date +%T
+echo
 ./scripts/clean.sh
 echo
 ./scripts/compile_asan.sh
@@ -16,3 +18,6 @@ echo
 echo
 ./scripts/compile.sh
 ./scripts/test.sh
+echo
+date +%T
+echo
