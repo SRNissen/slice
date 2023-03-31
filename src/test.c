@@ -673,10 +673,18 @@ static void snns_Slice_zAlloc_too_many_bytes_to_Init_slice(void)
 
 static void snns_Slice_zAlloc_testGroup(void)
 {
+    //Alloc to an INIT slice
     snns_Slice_zAlloc_zero_bytes_to_Init_Slice();
-    snns_Slice_zAlloc_any_bytes_to_non_Init_slice();
     snns_Slice_zAlloc_ten_bytes_to_Init_slice();
     snns_Slice_zAlloc_too_many_bytes_to_Init_slice();
+
+    //Alloc to non-INIT slice
+    snns_Slice_zAlloc_any_bytes_to_non_Init_slice();
+}
+
+static void snns_Slice_reAlloc_testGroup(void)
+{
+    
 }
 
 int main(int argc, char **argv)
@@ -688,6 +696,7 @@ int main(int argc, char **argv)
     snns_Slice_doClear_testGroup();
     snns_Slice_MemoryFunctions_testGroup();
     snns_Slice_zAlloc_testGroup();
+    snns_Slice_reAlloc_testGroup();
 
     puts("---All tests passed");
 }
